@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                            http://www.springframework.org/schema/context
+                            http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                            http://www.springframework.org/schema/mvc
+                            http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+    <!-- log4j -->
+    <bean
+        id="log4jInitialization"
+        class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property
+            name="targetClass"
+            value="org.springframework.util.Log4jConfigurer" />
+        <property
+            name="targetMethod"
+            value="initLogging" />
+        <property name="arguments">
+            <list>
+                <value>classpath:kr/jh/config/properties/log4j.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- mvc -->
+    <mvc:annotation-driven />
+    <mvc:default-servlet-handler />
+    
+    <!-- annotation driven -->
+    <context:component-scan base-package="kr.jh.controller" />
+    
+    <!-- handler mapping -->
+<!--     <bean -->
+<!--         class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" -->
+<!--         p:basePackage="kr.jh.controller" -->
+<!--         p:caseSensitive="true" -->
+<!--         p:order="1" /> -->
+        
+    <!-- Tiles View -->
+    <bean
+        id="tilesConfigurer"
+        class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/tiles/*-defs.xml</value>
+            </list>
+        </property>
+        <property
+            name="preparerFactoryClass"
+            value="org.springframework.web.servlet.view.tiles2.SimpleSpringPreparerFactory" />
+    </bean>
+        
+    <!-- View Resolver -->
+<!--     <bean -->
+<!--         id="viewResolver" -->
+<!--         class="org.springframework.web.servlet.view.UrlBasedViewResolver" -->
+<!--         p:prefix="/WEB-INF/jsp/" -->
+<!--         p:suffix=".jsp" -->
+<!--         p:viewClass="org.springframework.web.servlet.view.JstlView" /> -->
+    <bean
+        id="viewResolver"
+        class="org.springframework.web.servlet.view.UrlBasedViewResolver"
+        p:viewClass="org.springframework.web.servlet.view.tiles2.TilesView" />
+<!--     <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"> -->
+<!--         <property name="mediaTypes"> -->
+<!--             <map> -->
+<!--                 <entry -->
+<!--                     key="html" -->
+<!--                     value="text/html" /> -->
+<!--                 <entry -->
+<!--                     key="json" -->
+<!--                     value="application/json" /> -->
+<!--             </map> -->
+<!--         </property> -->
+<!--         <property name="viewResolvers"> -->
+<!--             <list> -->
+<!--                 <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver"> -->
+<!--                     <property -->
+<!--                         name="viewClass" -->
+<!--                         value="org.springframework.web.servlet.view.tiles2.TilesView" /> -->
+<!--                 </bean> -->
+<!--             </list> -->
+<!--         </property> -->
+<!--         <property name="defaultViews"> -->
+<!--             <list> -->
+<!--                 <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" /> -->
+<!--             </list> -->
+<!--         </property> -->
+<!--     </bean> -->
+
+    <!-- Exception Resolver -->
+    <bean
+        id="exceptionResolver"
+        class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.Exception">err/exception</prop>
+            </props>
+        </property>
+        <property
+            name="exceptionAttribute"
+            value="exception" />
+        <property
+            name="defaultErrorView"
+            value="err/exception" />
+    </bean>
+</beans>
