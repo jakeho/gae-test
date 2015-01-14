@@ -1,0 +1,4 @@
+@CHARSET "UTF-8";
+table {border-collapse: collapse;}
+table thead th {border:1px solid #cdcdcd;}
+table tbody td {border:1px solid #eaeaea;}
